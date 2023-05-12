@@ -1,58 +1,76 @@
-//Librerias a utilizar
 #include <iostream>
-#include <iomanip> // setprecision 
+#include <conio.h> 
 #include <math.h>
-#include<cstdlib>
 
 using namespace std;
 
-int main(){
-	//Se definen las variables a utilizar en el Programa
-	int i, n;
-	float xi,xr, fx, fprima,error,ErrorIteracion;
+void iter(double x);
+double f(double x);
+double fp(double x);
+void error(double xact, double xant);
+void mostrar(double a, string tipo);
 
-	cout<<"Programa para el calculo de raiz a traves de Newthon Raphson"<<endl;
-	//Se pide las iteraciones a realizar
-	cout<<"¿Cuantas iteraciones desea?"<<endl; cin>>n;
-	//Se pide el valor inicial para comenzar a correr el programa
-	cout<<"¿Valor inicial x0?"<<endl; cin>>xi;
-	//Se pide el error con el que se trabajara
-	cout<<"¿Error a usar?"<<endl; cin>>error;
+int main()
+{
+	int i = 0;
+    while (true)
+	{
+		cout << "iteracion" << i <<endl;
+		double x = 0;
+		cout << "Valor de x";
+		cin >> x;
 
-	//Se crea un bucle for para comenzar a calcular las aproximaciones
-	for(i=0; i<=n; i++){
-		//Se crea la función donde sera evaluada el valor inicial
-		fx = (pow(xi,3))+(4*(pow(xi,2)))-10;
-		//Se derivada la funcion que se va a utilizar 
-		fprima = (3*(pow(xi,2)))+(8*xi);
-		//Se realiza la formula de Newthon Raphson 
-		xr = xi-(fx/fprima);
-		//Se calcula el error 
-		ErrorIteracion= fabs(((xr-xi)/xr)*100);
+		iter(x);
 
-		//Se crea el header de la tabla 
-		if(i==0){
-			cout <<"\tIteracion\t  Xn \t\t\tf(Xn) \t\tf'(Xn) \t\tXn+1 \t\tError"<<endl;
-		}
-
-		//Si el valor de Error que vamos obteniendo es menor al error que se le ingreso, el programa finaliza
-		if(ErrorIteracion<error){
-			//Se imprime la ultima iteracion que ya coincide con el error que se ingreso
-			cout << "\t"<<i+1<< "\t\t"<<xi<< "\t\t\t"<<fx<< "\t\t"<<fprima<< "\t\t"<<xr<< "\t\t"<<ErrorIteracion<<endl;
-			cout << "\nLa raiz aproximada de la funcion es: " << xr;
-			std::cin.get();
-			break;
-		}
-		
-		//Se define los decimales que utilizaremos
-		cout <<setprecision(4);
-		//Se imprimen los valores que vamos obteniendo
-		cout << "\t"<<i+1<< "\t\t"<<xi<< "\t\t\t"<<fx<< "\t\t"<<fprima<< "\t\t"<<xr<< "\t\t"<<ErrorIteracion<<endl;
-		//Se indica el nuevo valor de xi para seguir evaluando
-		xi=xr;
+		i++;
 	}
-	//Presionar para finalizar el programa
-	std::cin.get();
+
+	getch();
 	return 0;
 }
 
+void iter(double x)
+{
+	double xn = 0;
+	string a = "xn: ";
+
+	xn = x - (f(x) / fp(x));
+
+	mostrar(xn, a);
+	error(xn, x);
+
+	cout << endl;
+}
+
+double f(double x)
+{
+	string a = "f: ";
+	double f = pow(x, 3) + (2 * x) - 1;
+
+	mostrar(f, a);
+	return f;
+}
+
+double fp(double x)
+{
+	string a  = "f': ";
+	double fp = 3 * pow(x, 2) + 2;
+
+	mostrar(fp, a);
+	return fp;
+}
+
+void error(double xact, double xant)
+{
+	string a = "Error: ";
+
+	double err = 0;
+	err = abs(xact - xant) * 100;
+
+	mostrar(err, a);
+}
+
+void mostrar(double a, string tipo)
+{
+	cout << tipo << a << endl;
+}
